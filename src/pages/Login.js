@@ -35,7 +35,7 @@ export default () => {
         if(loginData?.data?.jwt) {
             localStorage.setItem('cc-userJWT', loginData.data.jwt)
             localStorage.setItem('cc-userData', JSON.stringify(loginData.data.user))
-            navigate('/home')
+            navigate('/')
             window.location.reload()
         }
     }
