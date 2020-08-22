@@ -19,16 +19,27 @@ export const getAllUserCalorieLogsViaTimeFrame = async (userId, begin, end) => {
     
     try {
         allUserData = await server.default.get(`/api/v1/users/allData/${ userId }`)
+        console.log('EEE', allUserData.data)
 
         // filter through calorieLogs
         allUserData.data.calories = allUserData.data.calories.filter(log => {
-            return moment(log.logged_at).unix() > begin && moment(log.logged_at).unix() < end
+            if(moment(log.logged_at).unix() > begin && moment(log.logged_at).unix() < end) {
+                return true
+            } else {
+                allUserData.data.totals.caloriesGained -= log.calories
+            }
         })
 
         // filter through exerciseLogs
         allUserData.data.exercise = allUserData.data.exercise.filter(log => {
-            return moment(log.logged_at).unix() > begin && moment(log.logged_at).unix() < end
+            if(moment(log.logged_at).unix() > begin && moment(log.logged_at).unix() < end) {
+                return true
+            } else {
+                allUserData.data.totals.caloriesBurnt -= log.calories_burnt
+            }
         })
+
+        allUserData.data.totals.netCalories = allUserData.data.totals.caloriesGained + allUserData.data.totals.caloriesBurnt
     } catch(err) {
         console.log('err', err)
     }
