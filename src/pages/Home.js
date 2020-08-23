@@ -9,8 +9,8 @@ import { getAllUserCalorieLogsViaTimeFrame } from '../api/actions/users'
 const Home = () => {
     const now = new Date()
     const [ allUserData, setAllUserData ] = useState()
-    const [ startDate, setStartDate ] = useState(now.getTime() - 604800000)
-    const [ endDate, setEndDate ] = useState(Date.now())
+    const [ startDate, setStartDate ] = useState(now.getTime() - 604800000) // one week ago
+    const [ endDate, setEndDate ] = useState(Date.now() + 86400000) // tomorrow
 
     // ensure user is logged in, if not redirect to the login page
     const userData = JSON.parse(localStorage.getItem('cc-userData'))
@@ -52,18 +52,29 @@ const Home = () => {
                     endDate={ endDate }
                     setEndDate={ setEndDate }
                 />
-
-                <div className="rounded border border-gray-500 p-4 m-4">
-                    <div className="flex justify-center" >
-                        <CalorieTable type="Food" logs={ allUserData?.calories } />
+                {
+                    allUserData?.calories.length
+                    ?
+                    <div className="rounded border border-gray-500 p-4 m-4">
+                        <div className="flex justify-center" >
+                            <CalorieTable type="Food" logs={ allUserData?.calories } />
+                        </div>
                     </div>
-                </div>
+                    :
+                    <div style={{ margin: '20px', border: '1px solid black' }} >No Food logs have been found in this date range...</div>
+                }
 
-                <div className="rounded border border-gray-500 p-4 m-4">
-                    <div className="flex justify-center" >
-                        <CalorieTable type="Activity" logs={ allUserData?.exercise } />
+                {
+                    allUserData?.exercise.length 
+                    ?
+                    <div className="rounded border border-gray-500 p-4 m-4">
+                        <div className="flex justify-center" >
+                            <CalorieTable type="Activity" logs={ allUserData?.exercise } />
+                        </div>
                     </div>
-                </div>
+                    :
+                    <div style={{ margin: '20px', border: '1px solid black' }} >No Exercise logs have been found in this date range...</div>
+                }
 
                 <div className="grid grid-cols-3 gap-4 m-4">
                     <div><p className="text-xl font-bold">Calories Gained:</p><h2 className="text-2xl text-red-700 font-bold" >{ allUserData?.totals?.caloriesGained }</h2></div>
