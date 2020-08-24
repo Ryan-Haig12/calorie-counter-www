@@ -42,6 +42,7 @@ const AddNewLog = props => {
                 newLogData = await server.post('/api/v1/calories/createLog', {
                     userId,
                     food: data[type],
+                    timeOfDay: data.timeOfDay,
                     calories: data.calories
                 })
                 return navigate('/')
@@ -65,6 +66,28 @@ const AddNewLog = props => {
                             className="appearance-none w-10/12 block px-3 py-2 border border-gray-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                         />
                     </div>
+
+                    { type === 'food' &&
+                        <div>
+                            <label htmlFor='timeOfDay' className="block text-sm font-medium leading-5 text-gray-700">
+                                Meal Type
+                            </label>
+                            <div className="inline-block relative w-9/12">
+                                <select 
+                                    name="timeOfDay" type="timeOfDay" placeholder="Meal Type" ref={ register({ required: true }) } 
+                                    className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                                >
+                                    <option>Breakfast</option>
+                                    <option>Lunch</option>
+                                    <option>Dinner</option>
+                                    <option>Snack</option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    }
 
                     <label htmlFor='calories' className="block text-sm font-medium leading-5 text-gray-700">
                         Calories { type === 'exercise' && 'Burnt ' }
